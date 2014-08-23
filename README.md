@@ -58,3 +58,7 @@ GET reqest でusername パラメータにuser_ID が入る。
 ### send yo
 
 カンマ区切りで複数ユーザに送れると便利かも。
+
+# License
+
+GNU AFFERO GENERAL PUBLIC LICENSE
