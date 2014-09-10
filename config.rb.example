@@ -3,3 +3,17 @@ DBHOST = "localhost"
 DBUSER = "root"
 DBPASS = "root"
 DBNAME = "OpenYo"
+
+YOTOKEN = "YO-API-TOKEN"
+
+def decideType(database, username, fromUser, type)
+  case type
+  when "callback" then
+  when "imkayac" then
+    notifyImKayac(database, username, fromUser)
+  when "yo" then
+    notifyYo(database, username, fromUser)
+  else
+    # doushiyou...
+  end
+end

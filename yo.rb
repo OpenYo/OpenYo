@@ -52,7 +52,9 @@ def addFriend(database, username, friend)
 end
 
 def notify(database, username, fromUser)
-  notifyImKayac(database, username, fromUser) # とりあえずKayac 決め打ち
+  database.query("SELECT * FROM notifyType WHERE userId='#{username}'").each do |r|
+    decideType(database, username, fromUser, r["type"])
+  end
 end
 
 def notifyImKayac(database, username, fromUser)

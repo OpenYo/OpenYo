@@ -7,3 +7,4 @@ CREATE TABLE callback(userId VARCHAR(31) not null, uri    VARCHAR(255) not null)
 CREATE TABLE apiToken (userId VARCHAR(31) not null, token  VARCHAR(63) not null);
 CREATE TABLE imkayac (userId VARCHAR(31) not null, kayacId VARCHAR(31) not null, password VARCHAR(31), seckey VARCHAR(31));
 CREATE TABLE yoUser (userId VARCHAR(31) not null, yoId VARCHAR(31) not null);
+CREATE TABLE notifyType (userId VARCHAR(31) not null, type VARCHAR(31) not null);
