@@ -60,7 +60,8 @@ GET reqest でusername パラメータにuser_ID が入る。
 とりあえず
 * [`im.kayac.com`](http://im.kayac.com/)
 * Callback
-
+* Yo API
+* Other OpenYo server
 ぐらいを考えています。
 
 ### send yo
