@@ -63,3 +63,13 @@ def friends_count(database, api_token)
   end
   return "{\"result\": #{count}}\n"
 end
+
+def list_friends(database, api_token)
+  token_user = getTokenUser(database, api_token)
+  return "unknown api_token: #{api_token}\n" if token_user.nil?
+  list = []
+  database.query("SELECT * FROM friends WHERE userId='#{token_user}'").each do |r|
+    list << r["friend"]
+  end
+  return "{\"friends\": #{list.to_s}}\n"
+end

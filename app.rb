@@ -43,5 +43,14 @@ module Portfolio
       end
       "bad api_ver\n{0.1}\n"
     end
+    get '/list_friends' do
+      redirect "/list_friends/", 301
+    end
+    get '/list_friends/' do
+      if params[:api_ver] == "0.1"
+        return list_friends(@database, params[:api_token])
+      end
+      "bad api_ver\n{0.1}\n"
+    end
   end
 end
