@@ -6,6 +6,7 @@ require 'rack/rewrite'
 require 'mysql2'
 
 require_relative 'yo'
+require_relative 'config'
 
 module Portfolio
   class App < Sinatra::Base
@@ -13,10 +14,11 @@ module Portfolio
     configure :development do
       register Sinatra::Reloader
       also_reload "#{File.dirname(__FILE__)}/yo.rb"
+      also_reload "#{File.dirname(__FILE__)}/config.rb"
     end
 
     before do
-      @database = Mysql2::Client.new(:host => "localhost", :username => "root", :password => "root", :database => "OpenYo")
+      @database = Mysql2::Client.new(:host => DBHOST, :username => DBUSER, :password => DBPASS, :database => DBNAME)
     end
     
     get '/' do

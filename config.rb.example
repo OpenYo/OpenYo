@@ -1,0 +1,5 @@
+# -*- coding: utf-8 -*-
+DBHOST = "localhost"
+DBUSER = "root"
+DBPASS = "root"
+DBNAME = "OpenYo"
