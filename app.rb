@@ -20,7 +20,7 @@ module Portfolio
     end
     
     get '/' do
-      "<body bgcolor=\"#267CA7\">Yo!"
+      "<body bgcolor=\"#267CA7\"><a href=\"https://github.com/nna774/OpenYo/\">Yo!</a>"
     end
     post '/yo' do
       "please send to /yo/\n"
@@ -28,6 +28,18 @@ module Portfolio
     post '/yo/' do
       if params[:api_ver] == "0.1"
         return sendYo(@database, params[:api_token], params[:username])
+      end
+      "bad api_ver\n{0.1}\n"
+    end
+    get '/yo/' do
+      redirect "/", 301
+    end
+    get '/friends_count' do
+      redirect "/friends_count/", 301
+    end
+    get '/friends_count/' do
+      if params[:api_ver] == "0.1"
+        return friends_count(@database, params[:api_token])
       end
       "bad api_ver\n{0.1}\n"
     end

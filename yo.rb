@@ -2,12 +2,17 @@
 require 'net/http'
 require 'uri'
 
-def sendYo(database, api_token, username)
+def getTokenUser(database, api_token)
   token_user = nil
   database.query("SELECT * FROM apiToken WHERE token='#{database.escape("#{api_token}")}' LIMIT 1").each do |r|
     token_user = r["userId"]
   end
-  return "unknown apt_token: #{api_token}\n" if token_user.nil?
+  return token_user
+end
+
+def sendYo(database, api_token, username)
+  token_user = getTokenUser(database, api_token)
+  return "unknown api_token: #{api_token}\n" if token_user.nil?
   userExist = nil
   database.query("SELECT * FROM apiToken WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
     userExist = r["userId"]
@@ -47,4 +52,14 @@ def notifyImKayac(database, username, fromUser)
     http = Net::HTTP.new(uri.host)
     http.post(uri.path, URI.escape("message=[OpenYo]\nYo from #{fromUser}"))
   end
+end
+
+def friends_count(database, api_token)
+  token_user = getTokenUser(database, api_token)
+  return "unknown api_token: #{api_token}\n" if token_user.nil?
+  count = nil
+  database.query("SELECT COUNT(*) FROM friends WHERE userId='#{token_user}'").each do |r|
+    count = r["COUNT(*)"]
+  end
+  return "{\"result\": #{count}}\n"
 end
