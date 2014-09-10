@@ -55,6 +55,14 @@ GET reqest でusername パラメータにuser_ID が入る。
 
 ## memo
 
+### notify の方法
+
+とりあえず
+* [`im.kayac.com`](http://im.kayac.com/)
+* Callback
+
+ぐらいを考えています。
+
 ### send yo
 
 カンマ区切りで複数ユーザに送れると便利かも。
