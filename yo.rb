@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 require 'net/http'
 require 'uri'
+require 'securerandom'
 
 def getTokenUser(database, api_token)
   token_user = nil
@@ -93,4 +94,17 @@ def list_friends(database, api_token)
     list << r["friend"]
   end
   return "{\"friends\": #{list.to_s}}\n"
+end
+
+def createUser(database, username)
+  exists = nil
+  database.query("SELECT * FROM apiToken WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
+    exists = r["userId"]
+  end
+  if exists != nil
+    return "username #{username} is already exist.\n"
+  end
+  newToken = SecureRandom.uuid
+  database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
+  return "Your api_token is '#{newToken}'!\n"
 end

@@ -64,5 +64,11 @@ module Portfolio
       @token = params[:token]
       erb :sender
     end
+    post '/create_user/' do
+      if params[:api_ver] == "0.1"
+        return createUser(@database, params[:username])
+      end
+      "bad api_ver\n{0.1}\n"
+    end
   end
 end
