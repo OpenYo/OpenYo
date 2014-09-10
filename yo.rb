@@ -18,12 +18,22 @@ def sendYo(database, api_token, username)
     userExist = r["userId"]
   end
   return "unknown username: #{username}\n" if userExist.nil?
-  "api_token: #{api_token}\nusername: #{username}\ntoken_user: #{token_user}\n"
 
   addFriendEachOther(database, token_user, username)
 
   notify(database, username, token_user)
   "send Yo!\n"
+end
+
+def yoAll(database, api_token)
+  token_user = getTokenUser(database, api_token)
+  return "unknown api_token: #{api_token}\n" if token_user.nil?
+
+  database.query("SELECT * FROM friends WHERE userId='#{token_user}'").each do |r|
+    notify(database, r["friend"], token_user)
+  end
+
+  "send Yo ALL!\n"
 end
 
 def addFriendEachOther(database, token_user, username)

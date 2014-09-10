@@ -34,6 +34,12 @@ module Portfolio
     get '/yo/' do
       redirect "/", 301
     end
+    post '/yoall/' do
+      if params[:api_ver] == "0.1"
+        return yoAll(@database, params[:api_token])
+      end
+      "bad api_ver\n{0.1}\n"
+    end
     get '/friends_count' do
       redirect "/friends_count/", 301
     end

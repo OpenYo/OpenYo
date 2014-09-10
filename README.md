@@ -29,7 +29,7 @@ Yo ALL
 * POST request
  * api_ver と api_token パラメータをもつ。
  * api_ver=0.1
- * uri: `http://ENDPOINT/yolall/`
+ * uri: `http://ENDPOINT/yoall/`
 
 ### Count Total Friends
 
