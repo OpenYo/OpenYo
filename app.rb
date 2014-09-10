@@ -60,5 +60,9 @@ module Portfolio
       end
       "bad api_ver\n{0.1}\n"
     end
+    get '/sender/:token' do
+      @token = params[:token]
+      erb :sender
+    end
   end
 end

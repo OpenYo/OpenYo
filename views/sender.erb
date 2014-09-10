@@ -1,0 +1,12 @@
+<form action="/yo/" method="post">
+<p>to: <input type="text" name="username" value="nona7" size="20" /></p>
+<input type="hidden" name="api_token" value="<%= @token %>"/>
+<input type="hidden" name="api_ver" value="0.1"/>
+<p><input type="submit" name="submit" value="Yo!" /></p>
+</form>
+
+<form action="/yoall/" method="post">
+<input type="hidden" name="api_token" value="<%= @token %>"/>
+<input type="hidden" name="api_ver" value="0.1"/>
+<p><input type="submit" name="submit" value="Yo ALL" /></p>
+</form>
