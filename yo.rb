@@ -108,3 +108,11 @@ def createUser(database, username)
   database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
   return "Your api_token is '#{newToken}'!\n"
 end
+
+def addImkayac(database, api_token, kayacId, kayacPass, kayacSec)
+  token_user = getTokenUser(database, api_token)
+  return "unknown api_token: #{api_token}\n" if token_user.nil?
+  return "kayac_id is need.\n" if kayacId.nil?
+  database.query("INSERT INTO imkayac VALUES('#{token_user}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else '#{database.escape(kayacPass)}' end}, #{if kayacSec.nil? then 'NULL' else '#{database.escape(kayacSec)}' end})")
+  return "success!\n"
+end

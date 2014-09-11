@@ -70,5 +70,11 @@ module Portfolio
       end
       "bad api_ver\n{0.1}\n"
     end
+    post '/add_imkayac/' do
+      if params[:api_ver] == "0.1"
+        return addImkayac(@database, params[:api_token], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
+      end
+      "bad api_ver\n{0.1}\n"
+    end
   end
 end
