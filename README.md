@@ -1,5 +1,6 @@
 OpenYo
 ======
+[![Code Climate](https://codeclimate.com/github/nna774/OpenYo/badges/gpa.svg)](https://codeclimate.com/github/nna774/OpenYo)
 
 Yo のようなプロプラエタリなサービスに依存してはいけない。自由なYo 実装が必要である。
 
