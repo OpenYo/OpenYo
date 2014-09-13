@@ -22,7 +22,7 @@ module Portfolio
     end
     
     get '/' do
-      "<body bgcolor=\"#267CA7\"><a href=\"https://github.com/nna774/OpenYo/\">Yo!</a>"
+      erb :top
     end
     post '/yo' do
       "please send to /yo/\n"
