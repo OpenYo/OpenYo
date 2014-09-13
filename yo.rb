@@ -117,5 +117,12 @@ module Yo
     database.query("INSERT INTO imkayac VALUES('#{token_user}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else '#{database.escape(kayacPass)}' end}, #{if kayacSec.nil? then 'NULL' else '#{database.escape(kayacSec)}' end})")
     return "success!\n"
   end
-  module_function :getTokenUser, :sendYo, :yoAll, :notify, :notifyImKayac, :notifyYo, :friends_count, :list_friends, :createUser, :addImkayac
+  def checkApiVersion(ver)
+    if ver != "0.1" then
+      "bad api_ver\n{0.1}\n"
+    else
+      nil
+    end
+  end
+  module_function :getTokenUser, :sendYo, :yoAll, :notify, :notifyImKayac, :notifyYo, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion
 end
