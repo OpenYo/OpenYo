@@ -29,7 +29,7 @@ module Portfolio
     end
     post '/yo/' do
       if params[:api_ver] == "0.1"
-        return sendYo(@database, params[:api_token], params[:username])
+        return Yo::sendYo(@database, params[:api_token], params[:username])
       end
       "bad api_ver\n{0.1}\n"
     end
@@ -38,7 +38,7 @@ module Portfolio
     end
     post '/yoall/' do
       if params[:api_ver] == "0.1"
-        return yoAll(@database, params[:api_token])
+        return Yo::yoAll(@database, params[:api_token])
       end
       "bad api_ver\n{0.1}\n"
     end
@@ -47,7 +47,7 @@ module Portfolio
     end
     get '/friends_count/' do
       if params[:api_ver] == "0.1"
-        return friends_count(@database, params[:api_token])
+        return Yo::friends_count(@database, params[:api_token])
       end
       "bad api_ver\n{0.1}\n"
     end
@@ -56,7 +56,7 @@ module Portfolio
     end
     get '/list_friends/' do
       if params[:api_ver] == "0.1"
-        return list_friends(@database, params[:api_token])
+        return Yo::list_friends(@database, params[:api_token])
       end
       "bad api_ver\n{0.1}\n"
     end
@@ -66,13 +66,13 @@ module Portfolio
     end
     post '/create_user/' do
       if params[:api_ver] == "0.1"
-        return createUser(@database, params[:username])
+        return Yo::createUser(@database, params[:username])
       end
       "bad api_ver\n{0.1}\n"
     end
     post '/add_imkayac/' do
       if params[:api_ver] == "0.1"
-        return addImkayac(@database, params[:api_token], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
+        return Yo::addImkayac(@database, params[:api_token], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
       end
       "bad api_ver\n{0.1}\n"
     end
