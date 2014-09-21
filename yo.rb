@@ -14,7 +14,7 @@ module Yo
 
   def sendYo(database, api_token, username)
     token_user = getTokenUser(database, api_token)
-    return "unknown api_token: #{api_token}\n" if token_user.nil?
+    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
     userExist = nil
     database.query("SELECT * FROM apiToken WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
       userExist = r["userId"]
@@ -24,18 +24,17 @@ module Yo
     addFriendEachOther(database, token_user, username)
 
     notify(database, username, token_user)
-    "send Yo!\n"
+    "{\"code\": 200, \"result\": \"send Yo!\"}\n"
   end
 
   def yoAll(database, api_token)
     token_user = getTokenUser(database, api_token)
-    return "unknown api_token: #{api_token}\n" if token_user.nil?
+    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
 
     database.query("SELECT * FROM friends WHERE userId='#{token_user}'").each do |r|
       notify(database, r["friend"], token_user)
     end
-
-    "send Yo ALL!\n"
+    "{\"code\": 200, \"result\": \"send Yo ALL!\"}\n"
   end
 
   def addFriendEachOther(database, token_user, username)
@@ -79,7 +78,7 @@ module Yo
 
   def friends_count(database, api_token)
     token_user = getTokenUser(database, api_token)
-    return "unknown api_token: #{api_token}\n" if token_user.nil?
+    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
     count = nil
     database.query("SELECT COUNT(*) FROM friends WHERE userId='#{token_user}'").each do |r|
       count = r["COUNT(*)"]
@@ -89,12 +88,12 @@ module Yo
 
   def list_friends(database, api_token)
     token_user = getTokenUser(database, api_token)
-    return "unknown api_token: #{api_token}\n" if token_user.nil?
+    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
     list = []
     database.query("SELECT * FROM friends WHERE userId='#{token_user}'").each do |r|
       list << r["friend"]
     end
-    return "{\"friends\": #{list.to_s}}\n"
+    return "{\"code\": 200,\"friends\": #{list.to_s}}\n"
   end
 
   def createUser(database, username)
@@ -112,14 +111,14 @@ module Yo
 
   def addImkayac(database, api_token, kayacId, kayacPass, kayacSec)
     token_user = getTokenUser(database, api_token)
-    return "unknown api_token: #{api_token}\n" if token_user.nil?
+    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
     return "kayac_id is need.\n" if kayacId.nil?
     database.query("INSERT INTO imkayac VALUES('#{token_user}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else '#{database.escape(kayacPass)}' end}, #{if kayacSec.nil? then 'NULL' else '#{database.escape(kayacSec)}' end})")
     return "success!\n"
   end
   def checkApiVersion(ver)
     if ver != "0.1" then
-      "bad api_ver\n{0.1}\n"
+      "{\"code\": 400, \"result\": \"bad api_ver\n{0.1}\"}\n"
     else
       nil
     end
