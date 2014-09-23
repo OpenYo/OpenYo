@@ -37,12 +37,12 @@ module Yo
     "{\"code\": 200, \"result\": \"send Yo ALL!\"}\n"
   end
 
-  def addFriendEachOther(database, token_user, username)
+  def self.addFriendEachOther(database, token_user, username)
     addFriend(database, token_user, username)
     addFriend(database, username, token_user)
   end
 
-  def addFriend(database, username, friend)
+  def self.addFriend(database, username, friend)
     userExist = nil
     database.query("SELECT * FROM friends WHERE userId='#{database.escape("#{username}")}' AND friend='#{database.escape("#{friend}")}' LIMIT 1").each do |r|
       userExist = r["userId"]
