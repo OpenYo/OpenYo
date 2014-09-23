@@ -58,15 +58,6 @@ module Yo
     end
   end
 
-  def notifyYo(database, username, fromUser)
-    # 誰から来たのかわからない。
-    database.query("SELECT * FROM yoUser WHERE userId='#{database.escape("#{username}")}'").each do |r|
-      uri = URI.parse("https://api.justyo.co/yo/")
-      http = Net::HTTP.new(uri.host)
-      http.post(uri.path, URI.escape("api_token=#{YOTOKEN}&username=#{r["yoId"]}"))
-    end
-  end
-
   def friends_count(database, api_token)
     token_user = getTokenUser(database, api_token)
     return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
@@ -114,5 +105,5 @@ module Yo
       nil
     end
   end
-  module_function :getTokenUser, :sendYo, :yoAll, :notify, :notifyYo, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion
+  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion
 end
