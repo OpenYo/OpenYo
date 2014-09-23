@@ -58,15 +58,6 @@ module Yo
     end
   end
 
-  def notifyImKayac(database, username, fromUser)
-    # とりあえず無認証決め打ち
-    database.query("SELECT * FROM imkayac WHERE userId='#{database.escape("#{username}")}'").each do |r|
-      uri = URI.parse("http://im.kayac.com/api/post/#{r["kayacId"]}")
-      http = Net::HTTP.new(uri.host)
-      http.post(uri.path, URI.escape("message=[OpenYo]\nYo from #{fromUser}"))
-    end
-  end
-
   def notifyYo(database, username, fromUser)
     # 誰から来たのかわからない。
     database.query("SELECT * FROM yoUser WHERE userId='#{database.escape("#{username}")}'").each do |r|
@@ -123,5 +114,5 @@ module Yo
       nil
     end
   end
-  module_function :getTokenUser, :sendYo, :yoAll, :notify, :notifyImKayac, :notifyYo, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion
+  module_function :getTokenUser, :sendYo, :yoAll, :notify, :notifyYo, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion
 end

@@ -6,11 +6,13 @@ DBNAME = "OpenYo"
 
 YOTOKEN = "YO-API-TOKEN"
 
+require_relative 'plugins/imkayac'
+
 def decideType(database, username, fromUser, type)
   case type
   when "callback" then
   when "imkayac" then
-    notifyImKayac(database, username, fromUser)
+    ImKayac::notify(database, username, fromUser)
   when "yo" then
     notifyYo(database, username, fromUser)
   else
