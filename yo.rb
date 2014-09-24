@@ -89,7 +89,7 @@ module Yo
     end
     usernameOrig = username
     username.upcase!
-    if not /[A-Z0-9]{1,20}/ =~ username # ユーザ名は[A-Z0-9] の1〜20文字という制限でいいかな？
+    if (/^[A-Z0-9]{1,20}$/ =~ username).nil? # ユーザ名は[A-Z0-9] の1〜20文字という制限でいいかな？
       return "{\"code\": 400, \"result\": \"username should match [A-Z0-9]{1,20}. #{usernameOrig} is not match.\"}\n"
     end
     if password.nil?
