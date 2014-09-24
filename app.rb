@@ -56,10 +56,10 @@ module Portfolio
       Yo::checkApiVersion(params[:api_ver]) || Yo::createUser(@database, params[:username], params[:password])
     end
     post '/config/add_imkayac/' do
-      Yo::checkApiVersion(params[:api_ver]) || Yo::addImkayac(@database, params[:api_token], params[:password], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
+      Yo::checkApiVersion(params[:api_ver]) || Yo::addImkayac(@database, params[:username], params[:password], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
     end
     post '/config/new_api_token/' do
-      Yo::checkApiVersion(params[:api_ver]) || Yo::newApiToken(@database, params[:api_token], params[:password])
+      Yo::checkApiVersion(params[:api_ver]) || Yo::newApiToken(@database, params[:username], params[:password])
     end
   end
 end

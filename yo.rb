@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8-emacs -*-
 require 'net/http'
 require 'uri'
 require 'securerandom'
@@ -103,12 +103,13 @@ module Yo
     return returnMsg 200, newToken
   end
 
-  def addImkayac(database, api_token, password, kayacId, kayacPass, kayacSec)
-    token_user = getTokenUser(database, api_token)
-    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
-    return "kayac_id is need.\n" if kayacId.nil?
-    database.query("INSERT INTO imkayac VALUES('#{token_user}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else '#{database.escape(kayacPass)}' end}, #{if kayacSec.nil? then 'NULL' else '#{database.escape(kayacSec)}' end})")
-    return "success!\n"
+  def addImkayac(database, username, password, kayacId, kayacPass, kayacSec)
+    return returnMsg 400, "need kayac_id." if kayacId.nil?
+    if not checkPassword(database, username, password)
+      return returnMsg 400, "authentication failed."
+    end
+    database.query("INSERT INTO imkayac VALUES('#{username}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else '#{database.escape(kayacPass)}' end}, #{if kayacSec.nil? then 'NULL' else '#{database.escape(kayacSec)}' end})")
+    return returnMsg 200, "success!"
   end
 
   def checkApiVersion(ver)
