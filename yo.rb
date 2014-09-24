@@ -15,27 +15,27 @@ module Yo
 
   def sendYo(database, api_token, username)
     token_user = getTokenUser(database, api_token)
-    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
+    return returnMsg 400, "unknown api_token: #{api_token}" if token_user.nil?
     userExist = nil
     database.query("SELECT * FROM apiToken WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
       userExist = r["userId"]
     end
-    return "unknown username: #{username}\n" if userExist.nil?
+    return returnMsg 400, "unknown username: #{username}\n" if userExist.nil?
 
     addFriendEachOther(database, token_user, username)
 
     notify(database, username, token_user)
-    "{\"code\": 200, \"result\": \"send Yo!\"}\n"
+    returnMsg 200, "send Yo!"
   end
 
   def yoAll(database, api_token)
     token_user = getTokenUser(database, api_token)
-    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
+    return returnMsg 400, "unknown api_token: #{api_token}." if token_user.nil?
 
     database.query("SELECT * FROM friends WHERE userId='#{token_user}'").each do |r|
       notify(database, r["friend"], token_user)
     end
-    "{\"code\": 200, \"result\": \"send Yo ALL!\"}\n"
+    returnMsg 200, "send Yo ALL!"
   end
 
   def self.addFriendEachOther(database, token_user, username)
@@ -61,22 +61,22 @@ module Yo
 
   def friends_count(database, api_token)
     token_user = getTokenUser(database, api_token)
-    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
-    count = nil
+    return returnMsg 400, "unknown api_token: #{api_token}" if token_user.nil?
+    count = 0
     database.query("SELECT COUNT(*) FROM friends WHERE userId='#{token_user}'").each do |r|
       count = r["COUNT(*)"]
     end
-    return "{\"result\": #{count}}\n"
+    return returnMsg 200, count
   end
 
   def list_friends(database, api_token)
     token_user = getTokenUser(database, api_token)
-    return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
+    return returnMsg 400, "unknown api_token: #{api_token}" if token_user.nil?
     list = []
     database.query("SELECT * FROM friends WHERE userId='#{token_user}'").each do |r|
       list << r["friend"]
     end
-    return "{\"code\": 200,\"friends\": #{list.to_s}}\n"
+    return returnMsg 200, list.to_s
   end
 
   def createUser(database, username, password)
@@ -85,22 +85,22 @@ module Yo
       exists = r["userId"]
     end
     if not exists.nil?
-      return "{\"code\": 400, \"result\": \"username #{username} is already exist.\"}\n"
+      return returnMsg 400, "username #{username} is already exist."
     end
     usernameOrig = username
     username.upcase!
     if (/^[A-Z0-9]{1,20}$/ =~ username).nil? # ユーザ名は[A-Z0-9] の1〜20文字という制限でいいかな？
-      return "{\"code\": 400, \"result\": \"username should match [A-Z0-9]{1,20}. #{usernameOrig} is not match.\"}\n"
+      return returnMsg 400, "username should match [A-Z0-9]{1,20}. #{usernameOrig} is not match."
     end
     if password.nil?
-      return "{\"code\": 400, \"result\": \"password should not be empty.\"}\n"
+      return returnMsg 400, "password should not be empty."
     end
     salt = SecureRandom.uuid
     newToken = SecureRandom.uuid
     hash = Digest::SHA512.hexdigest(salt + password)
     database.query("INSERT INTO password VALUES('#{database.escape("#{username}")}', '#{salt}', '#{hash}')")
     database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
-    return "{\"code\": 200, \"result\": \"Your api_token is '#{newToken}'!\", \"api_token\": \"#{newToken}\"}\n"
+    return returnMsg 200, newToken
   end
 
   def addImkayac(database, api_token, password, kayacId, kayacPass, kayacSec)
@@ -110,9 +110,10 @@ module Yo
     database.query("INSERT INTO imkayac VALUES('#{token_user}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else '#{database.escape(kayacPass)}' end}, #{if kayacSec.nil? then 'NULL' else '#{database.escape(kayacSec)}' end})")
     return "success!\n"
   end
+
   def checkApiVersion(ver)
     if ver != "0.1" then
-      "{\"code\": 400, \"result\": \"bad api_ver\n{0.1}\"}\n"
+      returnMsg 400, "bad api_ver\n{0.1}."
     else
       nil
     end
@@ -129,5 +130,8 @@ module Yo
     return false if exists.nil?
     return Digest::SHA512.hexdigest(salt + password) == hash
   end
-  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion, :checkPassword
+  def returnMsg(code, msg)
+    return "{\"code\": #{code}, \"result\": \"#{msg}\"}\n"
+  end
+  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion, :checkPassword, :returnMsg
 end
