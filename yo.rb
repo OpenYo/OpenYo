@@ -1,4 +1,4 @@
-# -*- coding: utf-8-emacs -*-
+# -*- coding: utf-8 -*-
 require 'net/http'
 require 'uri'
 require 'securerandom'
