@@ -52,11 +52,14 @@ module Portfolio
       @token = params[:token]
       erb :sender
     end
-    post '/create_user/' do
-      Yo::checkApiVersion(params[:api_ver]) || Yo::createUser(@database, params[:username])
+    post '/config/create_user/' do
+      Yo::checkApiVersion(params[:api_ver]) || Yo::createUser(@database, params[:username], params[:password])
     end
-    post '/add_imkayac/' do
-      Yo::checkApiVersion(params[:api_ver]) || Yo::addImkayac(@database, params[:api_token], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
+    post '/config/add_imkayac/' do
+      Yo::checkApiVersion(params[:api_ver]) || Yo::addImkayac(@database, params[:api_token], params[:password], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
+    end
+    post '/config/new_api_token/' do
+      Yo::checkApiVersion(params[:api_ver]) || Yo::newApiToken(@database, params[:api_token], params[:password])
     end
   end
 end

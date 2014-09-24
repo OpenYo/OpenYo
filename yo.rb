@@ -2,6 +2,7 @@
 require 'net/http'
 require 'uri'
 require 'securerandom'
+require 'digest/sha2'
 
 module Yo
   def getTokenUser(database, api_token)
@@ -78,20 +79,31 @@ module Yo
     return "{\"code\": 200,\"friends\": #{list.to_s}}\n"
   end
 
-  def createUser(database, username)
+  def createUser(database, username, password)
     exists = nil
-    database.query("SELECT * FROM apiToken WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
+    database.query("SELECT * FROM password WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
       exists = r["userId"]
     end
     if exists != nil
-      return "username #{username} is already exist.\n"
+      return "{\"code\": 400, \"result\": \"username #{username} is already exist.\"}\n"
     end
+    usernameOrig = username
+    username.upcase!
+    if not /[A-Z0-9]{1,20}/ =~ username # ユーザ名は[A-Z0-9] の1〜20文字という制限でいいかな？
+      return "{\"code\": 400, \"result\": \"username should match [A-Z0-9]{1,20}. #{usernameOrig} is not match.\"}\n"
+    end
+    if password.nil?
+      return "{\"code\": 400, \"result\": \"password should not be empty.\"}\n"
+    end
+    salt = SecureRandom.uuid
     newToken = SecureRandom.uuid
+    hash = Digest::SHA512.hexdigest(salt + password)
+    database.query("INSERT INTO password VALUES('#{database.escape("#{username}")}', '#{salt}', '#{hash}')")
     database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
-    return "Your api_token is '#{newToken}'!\n"
+    return "{\"code\": 200, \"result\": \"Your api_token is '#{newToken}'!\", \"api_token\": \#{newToken}\"}\n"
   end
 
-  def addImkayac(database, api_token, kayacId, kayacPass, kayacSec)
+  def addImkayac(database, api_token, password, kayacId, kayacPass, kayacSec)
     token_user = getTokenUser(database, api_token)
     return "{\"code\": 400, \"result\": \"unknown api_token: #{api_token}\"}\n" if token_user.nil?
     return "kayac_id is need.\n" if kayacId.nil?
