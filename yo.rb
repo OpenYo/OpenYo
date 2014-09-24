@@ -84,7 +84,7 @@ module Yo
     database.query("SELECT * FROM password WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
       exists = r["userId"]
     end
-    if exists != nil
+    if not exists.nil?
       return "{\"code\": 400, \"result\": \"username #{username} is already exist.\"}\n"
     end
     usernameOrig = username
@@ -117,5 +117,17 @@ module Yo
       nil
     end
   end
-  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion
+  def checkPassword(database, username, password)
+    exists = nil
+    salt = nil
+    hash = nil
+    database.query("SELECT * FROM password WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
+      exists = r["userId"]
+      salt = r["salt"]
+      hash = r["hash"]
+    end
+    return false if exists.nil?
+    return Digest::SHA512.hexdigest(salt + password) == hash
+  end
+  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion, :checkPassword
 end
