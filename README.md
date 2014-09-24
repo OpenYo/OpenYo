@@ -50,6 +50,17 @@ Yo ALL
  * api_ver=0.1
  * uri: `http://ENDPOINT/list_friends/`
 
+## Create User
+
+ユーザ登録
+
+* POST request
+ * api_ver, username, password のパラメータをもつ。
+ * api_ver=0.1
+ * uri: `http://ENDPOINT/config/create_user/`
+
+api_token を含んだレスポンスが返ってきます。
+
 ## Callback
 
 GET reqest でusername パラメータにuser_ID が入る。
