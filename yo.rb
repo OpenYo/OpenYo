@@ -100,7 +100,7 @@ module Yo
     hash = Digest::SHA512.hexdigest(salt + password)
     database.query("INSERT INTO password VALUES('#{database.escape("#{username}")}', '#{salt}', '#{hash}')")
     database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
-    return "{\"code\": 200, \"result\": \"Your api_token is '#{newToken}'!\", \"api_token\": \#{newToken}\"}\n"
+    return "{\"code\": 200, \"result\": \"Your api_token is '#{newToken}'!\", \"api_token\": \"#{newToken}\"}\n"
   end
 
   def addImkayac(database, api_token, password, kayacId, kayacPass, kayacSec)
