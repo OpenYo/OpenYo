@@ -109,6 +109,13 @@ module Yo
       return returnMsg 400, "authentication failed."
     end
     database.query("INSERT INTO imkayac VALUES('#{username}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else "'#{database.escape(kayacPass)}'" end}, #{if kayacSec.nil? then 'NULL' else "'#{database.escape(kayacSec)}'" end})")
+    exists = nil
+    database.query("SELECT * FROM notifyType WHERE userId='#{database.escape("#{username}")}' AND type='imkayac' LIMIT 1").each do |r|
+      exists = r["userId"]
+    end
+    if exists.nil?
+      database.query("INSERT INTO notifyType VALUES('#{database.escape("#{username}")}', 'imkayac')")
+    end
     return returnMsg 200, "success!"
   end
 
