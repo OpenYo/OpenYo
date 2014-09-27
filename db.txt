@@ -9,3 +9,5 @@ CREATE TABLE imkayac (userId VARCHAR(31) not null, kayacId VARCHAR(31) not null,
 CREATE TABLE yoUser (userId VARCHAR(31) not null, yoId VARCHAR(31) not null);
 CREATE TABLE notifyType (userId VARCHAR(31) not null, type VARCHAR(31) not null);
 CREATE TABLE password (userId VARCHAR(31) not null, salt VARCHAR(63) not null, hash CHAR(128) not null);
+CREATE TABLE GCMApiToken (project VARCHAR(15) not null, token VARCHAR(63) not null);
+CREATE TABLE GCMRegId (userId VARCHAR(31) not null, project VARCHAR(15) not null, regId VARCHAR(4096) not null);
