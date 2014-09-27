@@ -7,6 +7,7 @@ DBNAME = "OpenYo"
 YOTOKEN = "YO-API-TOKEN"
 
 require_relative 'plugins/imkayac'
+require_relative 'plugins/yo'
 
 def decideType(database, username, fromUser, type)
   case type
@@ -14,8 +15,8 @@ def decideType(database, username, fromUser, type)
   when "imkayac" then
     ImKayac::notify(database, username, fromUser)
   when "yo" then
-    notifyYo(database, username, fromUser)
+    NotifyYo::notify(database, username, fromUser)
   else
-    # doushiyou...
+    # do nothing!
   end
 end
