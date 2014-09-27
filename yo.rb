@@ -126,7 +126,9 @@ module Yo
       nil
     end
   end
+
   def checkPassword(database, username, password)
+    return false if (username.nil? or password.nil?)
     exists = nil
     salt = nil
     hash = nil
@@ -138,6 +140,7 @@ module Yo
     return false if exists.nil?
     return Digest::SHA512.hexdigest(salt + password) == hash
   end
+
   def returnMsg(code, msg)
     return "{\"code\": #{code}, \"result\": \"#{msg}\"}\n"
   end
