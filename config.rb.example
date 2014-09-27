@@ -8,6 +8,7 @@ YOTOKEN = "YO-API-TOKEN"
 
 require_relative 'plugins/imkayac'
 require_relative 'plugins/yo'
+require_relative 'plugins/gcm'
 
 def decideType(database, username, fromUser, type)
   case type
@@ -16,6 +17,8 @@ def decideType(database, username, fromUser, type)
     ImKayac::notify(database, username, fromUser)
   when "yo" then
     NotifyYo::notify(database, username, fromUser)
+  when "gcm" then
+    GCM::notify(database, username, fromUser)
   else
     # do nothing!
   end
