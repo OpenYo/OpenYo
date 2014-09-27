@@ -55,11 +55,20 @@ module Portfolio
     post '/config/create_user/' do
       Yo::checkApiVersion(params[:api_ver]) || Yo::createUser(@database, params[:username], params[:password])
     end
+    post '/config/change_password/' do
+      Yo::checkApiVersion(params[:api_ver]) || Yo::changePassword(@database, params[:username], params[:password], params[:new_password])
+    end
     post '/config/add_imkayac/' do
       Yo::checkApiVersion(params[:api_ver]) || Yo::addImkayac(@database, params[:username], params[:password], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
     end
     post '/config/new_api_token/' do
       Yo::checkApiVersion(params[:api_ver]) || Yo::newApiToken(@database, params[:username], params[:password])
+    end
+    post '/config/list_tokens/' do # デバッグ用API
+      Yo::checkApiVersion(params[:api_ver]) || Yo::listTokens(@database, params[:username], params[:password])
+    end
+    post '/config/add_gcm_id/' do
+      Yo::checkApiVersion(params[:api_ver]) || Yo::addGCMId(@database, params[:username], params[:password], params[:proj_num], params[:reg_id])
     end
   end
 end
