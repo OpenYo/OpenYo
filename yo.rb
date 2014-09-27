@@ -119,6 +119,23 @@ module Yo
     return returnMsg 200, "success!"
   end
 
+  def addGCMId(database, username, password, projNum, regID)
+    return returnMsg 400, "need proj_num." if projNum.nil?
+    return returnMsg 400, "need reg_id." if regID.nil?
+    if not checkPassword(database, username, password)
+      return returnMsg 400, "authentication failed."
+    end
+    database.query("INSERT INTO GCMRegId VALUES('#{database.escape(username)}', '#{database.escape(projNum)}', '#{database.escape(regID)}')")
+    exists = nil
+    database.query("SELECT * FROM notifyType WHERE userId='#{database.escape("#{username}")}' AND type='gcm' LIMIT 1").each do |r|
+      exists = r["userId"]
+    end
+    if exists.nil?
+      database.query("INSERT INTO notifyType VALUES('#{database.escape("#{username}")}', 'gcm')")
+    end
+    return returnMsg 200, "success!"
+  end
+
   def checkApiVersion(ver)
     if ver != "0.1" then
       returnMsg 400, "bad api_ver\n{0.1}."
@@ -144,5 +161,6 @@ module Yo
   def returnMsg(code, msg)
     return "{\"code\": #{code}, \"result\": \"#{msg}\"}\n"
   end
-  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :checkApiVersion, :checkPassword, :returnMsg
+
+  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :addGCMId, :checkApiVersion, :checkPassword, :returnMsg
 end
