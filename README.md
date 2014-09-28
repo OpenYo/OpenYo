@@ -50,7 +50,7 @@ Yo ALL
  * api_ver=0.1
  * uri: `http://ENDPOINT/list_friends/`
 
-## Create User
+### Create User
 
 ユーザ登録
 
@@ -60,6 +60,18 @@ Yo ALL
  * uri: `http://ENDPOINT/config/create_user/`
 
 api_token を含んだレスポンスが返ってきます。
+
+### add imkayac
+
+[`im.kayac.com`](im.kayac.com) への通知の設定をします。
+
+* POST request
+ * 必須でapi_ver, username, password, kayac_id のパラメータをもつ。任意で、kayac_pass, kayac_sec のパラメータを持つ。
+ * api_ver=0.1
+ * uri: `http://ENDPOINT/config/add_imkayac/`
+
+create user の時に設定したusername, password をパラメータにわたし、im.kayac.com のユーザー名をkayac_id に入れてください。
+im.kayac のほうで、パスワードん認証や、秘密鍵認証の設定を行なっている人は、それぞれをパラメータに入れてください。
 
 ## Callback
 
@@ -83,4 +95,4 @@ GET reqest でusername パラメータにuser_ID が入る。
 
 # License
 
-GNU AFFERO GENERAL PUBLIC LICENSE
+GNU AFFERO GENERAL PUBLIC LICENSE 3.0 or any later version
