@@ -76,7 +76,7 @@ module Yo
     database.query("SELECT * FROM friends WHERE userId='#{token_user}'").each do |r|
       list << r["friend"]
     end
-    return returnMsg 200, list.to_s
+    return "{\"code\": 200, \"result\": #{list}}\n"
   end
 
   def createUser(database, username, password)
