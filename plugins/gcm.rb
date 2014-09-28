@@ -10,7 +10,7 @@ module GCM
       body = "[OpenYo]\nYo from #{fromUser}";
       param = "{\"registration_ids\": [\"#{r["regId"]}\"], \"data\": { \"message\": \"#{body}\" }}"
       header = { "Content-Type" => "application/json", "Authorization" => "key=#{apiToken}" }
-      http.post(uri.path, URI.escape(param), header)
+      http.post(uri.path, param, header)
     end
   end
   def self.getToken(database, projNum)
