@@ -14,6 +14,7 @@ module Portfolio
     configure :development do
       register Sinatra::Reloader
       also_reload "#{File.dirname(__FILE__)}/yo.rb"
+      also_reload "#{File.dirname(__FILE__)}/view.rb"
       also_reload "#{File.dirname(__FILE__)}/config.rb"
     end
 

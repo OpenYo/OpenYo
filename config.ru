@@ -1,3 +1,5 @@
 require "./app.rb"
-run Portfolio::App
+require "./view.rb"
 
+map('/') { run Portfolio::App }
+map('/views') { run View }
