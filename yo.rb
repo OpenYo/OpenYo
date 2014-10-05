@@ -145,6 +145,17 @@ module Yo
     return returnMsg 200, newToken
   end
 
+  def listTokens(database, username, password)
+    if not checkPassword(database, username, password)
+      return returnMsg 400, "authentication failed."
+    end
+    list = []
+    database.query("SELECT * FROM apiToken WHERE userId='#{username}'").each do |r|
+      list << r["token"]
+    end
+    return "{\"code\": 200, \"result\": #{list}}\n"
+  end
+
   def checkApiVersion(ver)
     if ver != "0.1" then
       returnMsg 400, "bad api_ver\n{0.1}."
@@ -171,5 +182,5 @@ module Yo
     return "{\"code\": #{code}, \"result\": \"#{msg}\"}\n"
   end
 
-  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :addGCMId, :newApiToken, :checkApiVersion, :checkPassword, :returnMsg
+  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :addGCMId, :newApiToken, :listTokens, :checkApiVersion, :checkPassword, :returnMsg
 end
