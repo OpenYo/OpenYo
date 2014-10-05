@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sinatra/cross_origin'
 require 'rack/rewrite'
 require 'mysql2'
 
@@ -17,6 +18,9 @@ module Portfolio
       also_reload "#{File.dirname(__FILE__)}/view.rb"
       also_reload "#{File.dirname(__FILE__)}/config.rb"
     end
+
+    register Sinatra::CrossOrigin
+    enable :cross_origin
 
     before do
       @database = Mysql2::Client.new(:host => DBHOST, :username => DBUSER, :password => DBPASS, :database => DBNAME)
