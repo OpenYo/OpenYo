@@ -65,6 +65,9 @@ module Portfolio
     post '/config/new_api_token/' do
       Yo::checkApiVersion(params[:api_ver]) || Yo::newApiToken(@database, params[:username], params[:password])
     end
+    post '/config/revoke_api_token/' do
+      Yo::checkApiVersion(params[:api_ver]) || Yo::revokeApiToken(@database, params[:username], params[:password], params[:api_token])
+    end
     post '/config/list_tokens/' do # デバッグ用API
       Yo::checkApiVersion(params[:api_ver]) || Yo::listTokens(@database, params[:username], params[:password])
     end
