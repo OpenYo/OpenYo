@@ -20,7 +20,7 @@ module Yo
     database.query("SELECT * FROM apiToken WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
       userExist = r["userId"]
     end
-    return returnMsg 400, "unknown username: #{username}\n" if userExist.nil?
+    return returnMsg 400, "unknown username: #{username}" if userExist.nil?
 
     addFriendEachOther(database, token_user, username)
 
