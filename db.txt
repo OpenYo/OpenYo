@@ -1,6 +1,3 @@
-id:pass
-root:root
-
 CREATE DATABASE OpenYo;
 CREATE TABLE friends (userId VARCHAR(31) not null, friend VARCHAR(31) not null);
 CREATE TABLE callback(userId VARCHAR(31) not null, uri    VARCHAR(255) not null);
