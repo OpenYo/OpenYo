@@ -9,3 +9,4 @@ CREATE TABLE notifyType (userId VARCHAR(31) not null, type VARCHAR(31) not null)
 CREATE TABLE password (userId VARCHAR(31) not null, salt VARCHAR(63) not null, hash CHAR(128) not null);
 CREATE TABLE GCMApiToken (project VARCHAR(15) not null, token VARCHAR(63) not null);
 CREATE TABLE GCMRegId (userId VARCHAR(31) not null, project VARCHAR(15) not null, regId VARCHAR(4096) not null);
+CREATE TABLE logYoed (userId VARCHAR(31) not null, fromUser VARCHAR(31) not null, time DATETIME not null);

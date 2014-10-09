@@ -57,6 +57,11 @@ module Yo
     database.query("SELECT * FROM notifyType WHERE userId='#{username}'").each do |r|
       decideType(database, username, fromUser, r["type"])
     end
+    logYoed(database, username, fromUser)
+  end
+
+  def self.logYoed(database, username, fromUser)
+    database.query("INSERT INTO logYoed VALUES('#{database.escape("#{username}")}', '#{database.escape("#{fromUser}")}', NOW())")
   end
 
   def friends_count(database, api_token)
