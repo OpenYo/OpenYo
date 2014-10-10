@@ -45,31 +45,25 @@ module Portfolio
       end
     end
 
+    before /(yo|yoll|friends_count|list_friends)/ do
+      if c = Yo::checkApiVersion(params[:api_ver])
+        halt 400, c
+      end
+    end
+
     get '/' do
       erb :top
     end
     post '/yo/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::sendYo(@database, params[:api_token], params[:username])
     end
     post '/yoall/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::yoAll(@database, params[:api_token])
     end
     get '/friends_count/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::friends_count(@database, params[:api_token])
     end
     get '/list_friends/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::list_friends(@database, params[:api_token])
     end
     get '/sender/:token' do
