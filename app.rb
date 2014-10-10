@@ -19,6 +19,13 @@ module Portfolio
       also_reload "#{File.dirname(__FILE__)}/config.rb"
     end
 
+    configure do
+      enable :logging
+      file = File.new("#{settings.root}/log/#{settings.environment}.log", 'a+')
+      file.sync = true
+      use Rack::CommonLogger, file
+    end
+
     register Sinatra::CrossOrigin
     enable :cross_origin
 
