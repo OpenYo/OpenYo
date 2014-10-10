@@ -110,9 +110,6 @@ module Yo
 
   def addImkayac(database, username, password, kayacId, kayacPass, kayacSec)
     return returnMsg 400, "need kayac_id." if kayacId.nil?
-    if not checkPassword(database, username, password)
-      return returnMsg 400, "authentication failed."
-    end
     database.query("INSERT INTO imkayac VALUES('#{username}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else "'#{database.escape(kayacPass)}'" end}, #{if kayacSec.nil? then 'NULL' else "'#{database.escape(kayacSec)}'" end})")
     exists = nil
     database.query("SELECT * FROM notifyType WHERE userId='#{database.escape("#{username}")}' AND type='imkayac' LIMIT 1").each do |r|
@@ -127,9 +124,6 @@ module Yo
   def addGCMId(database, username, password, projNum, regID)
     return returnMsg 400, "need proj_num." if projNum.nil?
     return returnMsg 400, "need reg_id." if regID.nil?
-    if not checkPassword(database, username, password)
-      return returnMsg 400, "authentication failed."
-    end
     database.query("INSERT INTO GCMRegId VALUES('#{database.escape(username)}', '#{database.escape(projNum)}', '#{database.escape(regID)}')")
     exists = nil
     database.query("SELECT * FROM notifyType WHERE userId='#{database.escape("#{username}")}' AND type='gcm' LIMIT 1").each do |r|
@@ -142,18 +136,12 @@ module Yo
   end
 
   def newApiToken(database, username, password)
-    if not checkPassword(database, username, password)
-      return returnMsg 400, "authentication failed."
-    end
     newToken = SecureRandom.uuid
     database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
     return returnMsg 200, newToken
   end
 
   def listTokens(database, username, password)
-    if not checkPassword(database, username, password)
-      return returnMsg 400, "authentication failed."
-    end
     list = []
     database.query("SELECT * FROM apiToken WHERE userId='#{username}'").each do |r|
       list << r["token"]
