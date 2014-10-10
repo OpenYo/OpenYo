@@ -32,7 +32,19 @@ module Portfolio
     before do
       @database = Mysql2::Client.new(:host => DBHOST, :username => DBUSER, :password => DBPASS, :database => DBNAME)
     end
-    
+
+    before '/config/*' do
+      if c = Yo::checkApiVersion(params[:api_ver])
+        halt 400, c
+      end
+      if request.path == "/config/create_user/"
+        return true
+      end
+      if not Yo::checkPassword(@database, params[:username], params[:password])
+        halt 401, (Yo::returnMsg 401, "authentication failed.")
+      end
+    end
+
     get '/' do
       erb :top
     end
@@ -65,45 +77,24 @@ module Portfolio
       erb :sender
     end
     post '/config/create_user/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::createUser(@database, params[:username], params[:password])
     end
     post '/config/change_password/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::changePassword(@database, params[:username], params[:password], params[:new_password])
     end
     post '/config/add_imkayac/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::addImkayac(@database, params[:username], params[:password], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
     end
     post '/config/new_api_token/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::newApiToken(@database, params[:username], params[:password])
     end
     post '/config/revoke_api_token/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::revokeApiToken(@database, params[:username], params[:password], params[:api_token])
     end
     post '/config/list_tokens/' do # デバッグ用API
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::listTokens(@database, params[:username], params[:password])
     end
     post '/config/add_gcm_id/' do
-      if c = Yo::checkApiVersion(params[:api_ver])
-        halt 400, c
-      end
       Yo::addGCMId(@database, params[:username], params[:password], params[:proj_num], params[:reg_id])
     end
   end
