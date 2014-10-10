@@ -70,8 +70,8 @@ api_token を含んだレスポンスが返ってきます。
  * api_ver=0.1
  * uri: `http://ENDPOINT/config/add_imkayac/`
 
-create user の時に設定したusername, password をパラメータにわたし、im.kayac.com のユーザー名をkayac_id に入れてください。
-im.kayac のほうで、パスワードん認証や、秘密鍵認証の設定を行なっている人は、それぞれをパラメータに入れてください。
+create user の時に設定したusername, password をパラメータに渡し、im.kayac.com のユーザー名をkayac_id に入れてください。
+im.kayac のほうで、パスワード認証や、秘密鍵認証の設定を行なっている人は、それぞれをパラメータに入れてください。
 
 ## Callback
 
