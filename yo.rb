@@ -163,9 +163,7 @@ module Yo
 
   def checkApiVersion(ver)
     if ver != "0.1" then
-      returnMsg 400, "bad api_ver\n{0.1}."
-    else
-      nil
+      returnMsg 400, "bad api_ver{0.1}."
     end
   end
 
