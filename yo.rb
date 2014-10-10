@@ -13,14 +13,15 @@ module Yo
     return token_user
   end
 
+  def self.existsUser(database, username)
+    result = database.query("SELECT * FROM password WHERE userId='#{database.escape("#{username}")}' LIMIT 1")
+    return result.count != 0
+  end
+
   def sendYo(database, api_token, username)
     token_user = getTokenUser(database, api_token)
     return returnMsg 400, "unknown api_token: #{api_token}" if token_user.nil?
-    userExist = nil
-    database.query("SELECT * FROM apiToken WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
-      userExist = r["userId"]
-    end
-    return returnMsg 400, "unknown username: #{username}" if userExist.nil?
+    return returnMsg 400, "unknown username: #{username}" if not existsUser(database, username)
 
     addFriendEachOther(database, token_user, username)
 
@@ -35,6 +36,9 @@ module Yo
     database.query("SELECT * FROM friends WHERE userId='#{token_user}'").each do |r|
       notify(database, r["friend"], token_user)
     end
+
+    # そもそもfriend にしか送れないのでfriend 登録は不要
+
     returnMsg 200, "send Yo ALL!"
   end
 
@@ -85,11 +89,7 @@ module Yo
   end
 
   def createUser(database, username, password)
-    exists = nil
-    database.query("SELECT * FROM password WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
-      exists = r["userId"]
-    end
-    if not exists.nil?
+    if existsUser(database, username)
       return returnMsg 400, "username #{username} is already exist."
     end
     usernameOrig = username
