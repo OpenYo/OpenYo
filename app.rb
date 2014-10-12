@@ -77,19 +77,19 @@ module Portfolio
       Yo::changePassword(@database, params[:username], params[:password], params[:new_password])
     end
     post '/config/add_imkayac/' do
-      Yo::addImkayac(@database, params[:username], params[:password], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
+      Yo::addImkayac(@database, params[:username], params[:kayac_id], params[:kayac_pass], params[:kayac_sec])
     end
     post '/config/new_api_token/' do
-      Yo::newApiToken(@database, params[:username], params[:password])
+      Yo::newApiToken(@database, params[:username])
     end
     post '/config/revoke_api_token/' do
-      Yo::revokeApiToken(@database, params[:username], params[:password], params[:api_token])
+      Yo::revokeApiToken(@database, params[:username], params[:api_token])
     end
     post '/config/list_tokens/' do # デバッグ用API
-      Yo::listTokens(@database, params[:username], params[:password])
+      Yo::listTokens(@database, params[:username])
     end
     post '/config/add_gcm_id/' do
-      Yo::addGCMId(@database, params[:username], params[:password], params[:proj_num], params[:reg_id])
+      Yo::addGCMId(@database, params[:username], params[:proj_num], params[:reg_id])
     end
   end
 end

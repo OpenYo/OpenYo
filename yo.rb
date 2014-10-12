@@ -108,7 +108,7 @@ module Yo
     return returnMsg 200, newToken
   end
 
-  def addImkayac(database, username, password, kayacId, kayacPass, kayacSec)
+  def addImkayac(database, username, kayacId, kayacPass, kayacSec)
     return returnMsg 400, "need kayac_id." if kayacId.nil?
     database.query("INSERT INTO imkayac VALUES('#{username}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else "'#{database.escape(kayacPass)}'" end}, #{if kayacSec.nil? then 'NULL' else "'#{database.escape(kayacSec)}'" end})")
     exists = nil
@@ -121,7 +121,7 @@ module Yo
     return returnMsg 200, "success!"
   end
 
-  def addGCMId(database, username, password, projNum, regID)
+  def addGCMId(database, username, projNum, regID)
     return returnMsg 400, "need proj_num." if projNum.nil?
     return returnMsg 400, "need reg_id." if regID.nil?
     database.query("INSERT INTO GCMRegId VALUES('#{database.escape(username)}', '#{database.escape(projNum)}', '#{database.escape(regID)}')")
@@ -135,13 +135,13 @@ module Yo
     return returnMsg 200, "success!"
   end
 
-  def newApiToken(database, username, password)
+  def newApiToken(database, username)
     newToken = SecureRandom.uuid
     database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
     return returnMsg 200, newToken
   end
 
-  def listTokens(database, username, password)
+  def listTokens(database, username)
     list = []
     database.query("SELECT * FROM apiToken WHERE userId='#{username}'").each do |r|
       list << r["token"]
