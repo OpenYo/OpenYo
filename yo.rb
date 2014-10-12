@@ -3,6 +3,7 @@ require 'net/http'
 require 'uri'
 require 'securerandom'
 require 'digest/sha2'
+require_relative 'config'
 
 module Yo
   def getTokenUser(database, api_token)
@@ -19,18 +20,21 @@ module Yo
   end
 
   def self.tooFast(database, fromUser)
-    delta = 1
-    max = 60 * 60 * 24
-    result = database.query("select * from logYoed where unix_timestamp(time) > unix_timestamp(now()) - #{delta} and fromUser = '#{database.escape(fromUser)}'")
+    delta = RATEDELTA
+    max = RATEMAX
+    span = RATESPAN
+    rate = RATERATE
+    result = database.query("select * from logYoed where unix_timestamp(time) > unix_timestamp(now()) - #{span} and fromUser = '#{database.escape(fromUser)}'")
     banResult = database.query("select * from banWhen where unix_timestamp(time) > unix_timestamp(now()) and userId = '#{database.escape(fromUser)}'")
-    return false if result.count == 0 && banResult.count == 0 # 1秒以上経ってて、Ban されていない
+    return false if result.count < rate && banResult.count == 0 # rate 以下で、Ban されていない
 
     result = database.query("select * from banWhen where time = (select max(time) from banWhen where userId='#{database.escape(fromUser)}') and userId='#{database.escape(fromUser)}' and unix_timestamp(time) > unix_timestamp(now())")
-    if result.count == 0 # はじめて
-      database.query("insert into banWhen values('#{database.escape(fromUser)}', #{delta * 2}, from_unixtime(unix_timestamp(now()) + #{delta * 2}))")
+    if result.count == 0 # 今はされてない
+      database.query("insert into banWhen values('#{database.escape(fromUser)}', #{RATE_BLACKBOX1(delta)}, from_unixtime(unix_timestamp(now()) + #{delta * 2}))")
     end
     result.each do |r|
-      forT = if r["forT"] * 2 > max then max else r["forT"] * 2 end
+      bl = RATE_BLACKBOX2(r["forT"])
+      forT = if bl > max then max else bl end
       database.query("insert into banWhen values('#{database.escape(fromUser)}', #{forT}, from_unixtime(unix_timestamp(now()) + #{forT}))")
       break
     end
@@ -39,7 +43,7 @@ module Yo
 
   def self.tooFastMsg(database, fromUser)
     database.query("select * from banWhen where time = (select max(time) from banWhen where userId='#{database.escape(fromUser)}') and userId='#{database.escape(fromUser)}' and unix_timestamp(time) > unix_timestamp(now())").each do |r|
-      return "#{r["time"]} まで待て"
+      return "You have reached a rate limit. Wait until #{r["time"]} and try again."
     end
   end
 
@@ -48,7 +52,7 @@ module Yo
     return returnMsg 400, "unknown api_token: #{api_token}" if token_user.nil?
     return returnMsg 400, "unknown username: #{username}" if not existsUser(database, username)
 
-    return returnMsg 500, tooFastMsg(database, token_user) if tooFast(database, token_user)
+    return returnMsg 403, tooFastMsg(database, token_user) if tooFast(database, token_user)
 
     addFriendEachOther(database, token_user, username)
 

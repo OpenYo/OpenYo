@@ -6,6 +6,12 @@ DBNAME = "OpenYo"
 
 YOTOKEN = "YO-API-TOKEN"
 
+RATEDELTA = 1 # 規制の最小時間
+RATEMAX = 60 * 60 * 24 # 規制の最大時間
+RATESPAN = 60
+RATERATE = 15
+# RATESPAN 秒内にRATERATE 回以上送ると規制開始
+
 require_relative 'plugins/imkayac'
 require_relative 'plugins/yo'
 require_relative 'plugins/gcm'
@@ -22,4 +28,12 @@ def decideType(database, username, fromUser, type)
   else
     # do nothing!
   end
+end
+
+def RATE_BLACKBOX1(delta) # 規制開始時の最小時間に何らかの変換関数を掛けることができます。
+  return delta * 2 # 規制時間は2秒(RATEDELTA が1 の時)
+end
+
+def RATE_BLACKBOX2(forT) # 規制中に送信しようとした時の延長用の関数
+  return forT * 2 # デフォルトでは倍々に増える
 end
