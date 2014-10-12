@@ -85,7 +85,7 @@ module Portfolio
     post '/config/revoke_api_token/' do
       Yo::revokeApiToken(@database, params[:username], params[:api_token])
     end
-    post '/config/list_tokens/' do # デバッグ用API
+    get '/config/list_tokens/' do # デバッグ用API
       Yo::listTokens(@database, params[:username])
     end
     post '/config/add_gcm_id/' do
