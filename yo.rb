@@ -7,14 +7,14 @@ require 'digest/sha2'
 module Yo
   def getTokenUser(database, api_token)
     token_user = nil
-    database.query("SELECT * FROM apiToken WHERE token='#{database.escape("#{api_token}")}' LIMIT 1").each do |r|
+    database.query("SELECT * FROM apiToken WHERE token='#{database.escape(api_token)}' LIMIT 1").each do |r|
       token_user = r["userId"]
     end
     return token_user
   end
 
   def self.existsUser(database, username)
-    result = database.query("SELECT * FROM password WHERE userId='#{database.escape("#{username}")}' LIMIT 1")
+    result = database.query("SELECT * FROM password WHERE userId='#{database.escape(username)}' LIMIT 1")
     return result.count != 0
   end
 
@@ -76,23 +76,23 @@ module Yo
 
   def self.addFriend(database, username, friend)
     userExist = nil
-    database.query("SELECT * FROM friends WHERE userId='#{database.escape("#{username}")}' AND friend='#{database.escape("#{friend}")}' LIMIT 1").each do |r|
+    database.query("SELECT * FROM friends WHERE userId='#{database.escape(username)}' AND friend='#{database.escape(friend)}' LIMIT 1").each do |r|
       userExist = r["userId"]
     end
     if userExist.nil?
-      database.query("INSERT INTO friends VALUES('#{database.escape("#{username}")}', '#{database.escape("#{friend}")}')")
+      database.query("INSERT INTO friends VALUES('#{database.escape(username)}', '#{database.escape(friend)}')")
     end
   end
 
   def notify(database, username, fromUser)
-    database.query("SELECT * FROM notifyType WHERE userId='#{username}'").each do |r|
+    database.query("SELECT * FROM notifyType WHERE userId='#{database.escape(username)}'").each do |r|
       decideType(database, username, fromUser, r["type"])
     end
     logYoed(database, username, fromUser)
   end
 
   def self.logYoed(database, username, fromUser)
-    database.query("INSERT INTO logYoed VALUES('#{database.escape("#{username}")}', '#{database.escape("#{fromUser}")}', NOW())")
+    database.query("INSERT INTO logYoed VALUES('#{database.escape(username)}', '#{database.escape(fromUser)}', NOW())")
   end
 
   def friends_count(database, api_token)
@@ -130,8 +130,8 @@ module Yo
     salt = SecureRandom.uuid
     newToken = SecureRandom.uuid
     hash = Digest::SHA512.hexdigest(salt + password)
-    database.query("INSERT INTO password VALUES('#{database.escape("#{username}")}', '#{salt}', '#{hash}')")
-    database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
+    database.query("INSERT INTO password VALUES('#{database.escape(username)}', '#{salt}', '#{hash}')")
+    database.query("INSERT INTO apiToken VALUES('#{database.escape(username)}', '#{newToken}')")
     return returnMsg 200, newToken
   end
 
@@ -139,11 +139,11 @@ module Yo
     return returnMsg 400, "need kayac_id." if kayacId.nil?
     database.query("INSERT INTO imkayac VALUES('#{username}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else "'#{database.escape(kayacPass)}'" end}, #{if kayacSec.nil? then 'NULL' else "'#{database.escape(kayacSec)}'" end})")
     exists = nil
-    database.query("SELECT * FROM notifyType WHERE userId='#{database.escape("#{username}")}' AND type='imkayac' LIMIT 1").each do |r|
+    database.query("SELECT * FROM notifyType WHERE userId='#{database.escape(username)}' AND type='imkayac' LIMIT 1").each do |r|
       exists = r["userId"]
     end
     if exists.nil?
-      database.query("INSERT INTO notifyType VALUES('#{database.escape("#{username}")}', 'imkayac')")
+      database.query("INSERT INTO notifyType VALUES('#{database.escape(username)}', 'imkayac')")
     end
     return returnMsg 200, "success!"
   end
@@ -153,24 +153,24 @@ module Yo
     return returnMsg 400, "need reg_id." if regID.nil?
     database.query("INSERT INTO GCMRegId VALUES('#{database.escape(username)}', '#{database.escape(projNum)}', '#{database.escape(regID)}')")
     exists = nil
-    database.query("SELECT * FROM notifyType WHERE userId='#{database.escape("#{username}")}' AND type='gcm' LIMIT 1").each do |r|
+    database.query("SELECT * FROM notifyType WHERE userId='#{database.escape(username)}' AND type='gcm' LIMIT 1").each do |r|
       exists = r["userId"]
     end
     if exists.nil?
-      database.query("INSERT INTO notifyType VALUES('#{database.escape("#{username}")}', 'gcm')")
+      database.query("INSERT INTO notifyType VALUES('#{database.escape(username)}', 'gcm')")
     end
     return returnMsg 200, "success!"
   end
 
   def newApiToken(database, username)
     newToken = SecureRandom.uuid
-    database.query("INSERT INTO apiToken VALUES('#{database.escape("#{username}")}', '#{newToken}')")
+    database.query("INSERT INTO apiToken VALUES('#{database.escape(username)}', '#{newToken}')")
     return returnMsg 200, newToken
   end
 
   def listTokens(database, username)
     list = []
-    database.query("SELECT * FROM apiToken WHERE userId='#{username}'").each do |r|
+    database.query("SELECT * FROM apiToken WHERE userId='#{database.escape(username)}").each do |r|
       list << r["token"]
     end
     return "{\"code\": 200, \"result\": #{list}}\n"
@@ -187,7 +187,7 @@ module Yo
     exists = nil
     salt = nil
     hash = nil
-    database.query("SELECT * FROM password WHERE userId='#{database.escape("#{username}")}' LIMIT 1").each do |r|
+    database.query("SELECT * FROM password WHERE userId='#{database.escape(username)}' LIMIT 1").each do |r|
       exists = r["userId"]
       salt = r["salt"]
       hash = r["hash"]
