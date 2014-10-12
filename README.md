@@ -8,11 +8,27 @@ Yo のようなプロプラエタリなサービスに依存してはいけな�
 
 user は一意なuser_ID を持つ。
 
-アカウントの管理はしばらく考えないこととする。
-
 ## API
 
-user はapi_token を持っている。
+### Create User
+
+ユーザ登録
+
+* POST request
+ * api_ver, username, password のパラメータをもつ。
+ * api_ver=0.1
+ * uri: `http://ENDPOINT/config/create_user/`
+
+api_token を含んだレスポンスが返ってきます。
+
+成功時
+````JSON
+{"code": 200, "result": "API_TOKEN"}
+````
+失敗時
+````JSON
+{"code": 400, "result": "失敗の理由"}
+````
 
 ### send yo
 
@@ -50,20 +66,10 @@ Yo ALL
  * api_ver=0.1
  * uri: `http://ENDPOINT/list_friends/`
 
-### Create User
-
-ユーザ登録
-
-* POST request
- * api_ver, username, password のパラメータをもつ。
- * api_ver=0.1
- * uri: `http://ENDPOINT/config/create_user/`
-
-api_token を含んだレスポンスが返ってきます。
-
 ### add imkayac
 
 [`im.kayac.com`](im.kayac.com) への通知の設定をします。
+iPhone への通知はこれを通じて行なえます。他にも、Jabber, Google Talk へ通知もできるらしいです。
 
 * POST request
  * 必須でapi_ver, username, password, kayac_id のパラメータをもつ。任意で、kayac_pass, kayac_sec のパラメータを持つ。
@@ -72,6 +78,39 @@ api_token を含んだレスポンスが返ってきます。
 
 create user の時に設定したusername, password をパラメータに渡し、im.kayac.com のユーザー名をkayac_id に入れてください。
 im.kayac のほうで、パスワード認証や、秘密鍵認証の設定を行なっている人は、それぞれをパラメータに入れてください。
+
+## New API Token
+
+新しいデバイスを使いはじめた等で、新しいAPI token が必要になったらお使いください。
+毎回新しいトークンを作って使い捨てるとかやめてください……
+
+* POST request
+ * api_ver と username, password パラメータをもつ。
+ * api_ver=0.1
+ * uri: `http://ENDPOINT/config/new_api_token/`
+
+## List API Token
+
+今までに取得したAPI Token の一覧を取得する。(できないほうがいい？)
+当面はデバッグ用API として残します。(API Ver が変わる時に廃止されるかもしれません)
+
+* GET request
+ * api_ver と username, password パラメータをもつ。
+ * api_ver=0.1
+ * uri: `http://ENDPOINT/config/list_tokens/`
+
+## add GCM Id
+
+Android 通知用のAPI
+あらかじめAndroid クライアント作者と協力して、GCM のプロジェクトナンバーと、通知用のtoken を教えてもらい、
+`GCMApiToken` テーブル に`(projNum, token)` のペアとして挿入されている必要があります。
+
+* POST request
+ * api\_ver と username, password, proj\_num, reg\_id パラメータをもつ。
+ * api_ver=0.1
+ * uri: `http://ENDPOINT/config/add_gcm_id/`
+
+`proj_num` がGCM のProject Number, `reg_id` がregistration id です。
 
 ## Callback
 
