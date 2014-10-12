@@ -66,6 +66,17 @@ Yo ALL
  * api_ver=0.1
  * uri: `http://ENDPOINT/list_friends/`
 
+### History
+
+最近来たYo
+
+* GET request
+ * api_ver と api_token パラメータをもつ。任意で count パラメータを持つ
+ * api_ver=0.1
+ * uri: `http://ENDPOINT/history/`
+
+`count` パラメータが`n` の時、最新n 件のYo の履歴を取ります。
+
 ### add imkayac
 
 [`im.kayac.com`](im.kayac.com) への通知の設定をします。
