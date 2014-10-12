@@ -45,7 +45,7 @@ module Portfolio
       end
     end
 
-    before /(yo|yoll|friends_count|list_friends)/ do
+    before /(yo|yoll|friends_count|list_friends|history)/ do
       if c = Yo::checkApiVersion(params[:api_ver])
         halt 400, c
       end
@@ -65,6 +65,13 @@ module Portfolio
     end
     get '/list_friends/' do
       Yo::list_friends(@database, params[:api_token])
+    end
+    get '/history/' do
+      max = 1000
+      count = nil
+      count = "20" if (params[:count].nil? or params[:count].to_i == 0 or params[:count].to_i > max)
+      count = count || params[:count].to_i.to_s
+      Yo::history(@database, params[:api_token], count)
     end
     get '/sender/:token' do
       @token = params[:token]

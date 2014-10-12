@@ -7,6 +7,7 @@ require_relative 'config'
 
 module Yo
   def getTokenUser(database, api_token)
+    return nil if api_token.nil?
     token_user = nil
     database.query("SELECT * FROM apiToken WHERE token='#{database.escape(api_token)}' LIMIT 1").each do |r|
       token_user = r["userId"]
@@ -119,6 +120,27 @@ module Yo
     return "{\"code\": 200, \"result\": #{list}}\n"
   end
 
+  def history(database, api_token, count)
+    token_user = getTokenUser(database, api_token)
+    return returnMsg 400, "unknown api_token: #{api_token}" if token_user.nil?
+    list = []
+    database.query("select * from logYoed where userId='nona7' order by time desc limit #{database.escape(count)}").each do |r|
+      list << "{\"user\": \"#{r["fromUser"]}\", \"time\": \"#{r["time"]}\"}"
+    end
+    str = "{\"code\": 200, \"result\": [" # #{list}}\n"
+    fst = false
+    list.each do |e|
+      if not fst
+        fst = true
+      else
+        str += ","
+      end
+      str += e
+    end
+    str += "]}"
+    return str
+  end
+
   def createUser(database, username, password)
     if existsUser(database, username)
       return returnMsg 400, "username #{username} is already exist."
@@ -204,5 +226,5 @@ module Yo
     return "{\"code\": #{code}, \"result\": \"#{msg}\"}\n"
   end
 
-  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :createUser, :addImkayac, :addGCMId, :newApiToken, :listTokens, :checkApiVersion, :checkPassword, :returnMsg
+  module_function :getTokenUser, :sendYo, :yoAll, :notify, :friends_count, :list_friends, :history, :createUser, :addImkayac, :addGCMId, :newApiToken, :listTokens, :checkApiVersion, :checkPassword, :returnMsg
 end
