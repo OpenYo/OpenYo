@@ -196,7 +196,7 @@ module Yo
 
   def listTokens(database, username)
     list = []
-    database.query("SELECT * FROM apiToken WHERE userId='#{database.escape(username)}").each do |r|
+    database.query("SELECT * FROM apiToken WHERE userId='#{database.escape(username)}'").each do |r|
       list << r["token"]
     end
     return "{\"code\": 200, \"result\": #{list}}\n"
