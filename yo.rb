@@ -16,6 +16,7 @@ module Yo
   end
 
   def self.existsUser(database, username)
+    return false if username.nil?
     result = database.query("SELECT * FROM password WHERE userId='#{database.escape(username)}' LIMIT 1")
     return result.count != 0
   end
