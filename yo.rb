@@ -125,7 +125,7 @@ module Yo
     token_user = getTokenUser(database, api_token)
     return returnMsg 400, "unknown api_token: #{api_token}" if token_user.nil?
     list = []
-    database.query("SELECT * FROM logYoed WHERE userId='nona7' ORDER BY time DESC LIMIT #{database.escape(count)}").each do |r|
+    database.query("SELECT * FROM logYoed WHERE userId='#{token_user}' ORDER BY time DESC LIMIT #{database.escape(count)}").each do |r|
       list << "{\"user\": \"#{r["fromUser"]}\", \"time\": \"#{r["time"]}\"}"
     end
     str = "{\"code\": 200, \"result\": [" # #{list}}\n"
