@@ -26,25 +26,25 @@ module Yo
     max = RATEMAX
     span = RATESPAN
     rate = RATERATE
-    result = database.query("select * from logYoed where unix_timestamp(time) > unix_timestamp(now()) - #{span} and fromUser = '#{database.escape(fromUser)}'")
-    banResult = database.query("select * from banWhen where unix_timestamp(time) > unix_timestamp(now()) and userId = '#{database.escape(fromUser)}'")
+    result = database.query("SELECT * FROM logYoed WHERE UNIX_TIMESTAMP(time) > UNIX_TIMESTAMP(NOW()) - #{span} AND fromUser = '#{database.escape(fromUser)}'")
+    banResult = database.query("SELECT * FROM banWhen WHERE UNIX_TIMESTAMP(time) > UNIX_TIMESTAMP(NOW()) AND userId = '#{database.escape(fromUser)}'")
     return false if result.count < rate && banResult.count == 0 # rate 以下で、Ban されていない
 
-    result = database.query("select * from banWhen where time = (select max(time) from banWhen where userId='#{database.escape(fromUser)}') and userId='#{database.escape(fromUser)}' and unix_timestamp(time) > unix_timestamp(now())")
+    result = database.query("SELECT * FROM banWhen WHERE time = (SELECT MAX(time) FROM banWhen WHERE userId='#{database.escape(fromUser)}') AND userId='#{database.escape(fromUser)}' AND UNIX_TIMESTAMP(time) > UNIX_TIMESTAMP(NOW())")
     if result.count == 0 # 今はされてない
-      database.query("insert into banWhen values('#{database.escape(fromUser)}', #{RATE_BLACKBOX1(delta)}, from_unixtime(unix_timestamp(now()) + #{delta * 2}))")
+      database.query("INSERT INTO banWhen VALUES('#{database.escape(fromUser)}', #{RATE_BLACKBOX1(delta)}, FROM_UNIXTIME(UNIX_TIMESTAMP(NOW()) + #{delta * 2}))")
     end
     result.each do |r|
       bl = RATE_BLACKBOX2(r["forT"])
       forT = if bl > max then max else bl end
-      database.query("insert into banWhen values('#{database.escape(fromUser)}', #{forT}, from_unixtime(unix_timestamp(now()) + #{forT}))")
+      database.query("INSERT INTO banWhen VALUES('#{database.escape(fromUser)}', #{forT}, FROM_UNIXTIME(UNIX_TIMESTAMP(NOW()) + #{forT}))")
       break
     end
     return true
   end
 
   def self.tooFastMsg(database, fromUser)
-    database.query("select * from banWhen where time = (select max(time) from banWhen where userId='#{database.escape(fromUser)}') and userId='#{database.escape(fromUser)}' and unix_timestamp(time) > unix_timestamp(now())").each do |r|
+    database.query("SELECT * FROM banWhen WHERE time = (SELECT MAX(time) FROM banWhen WHERE userId='#{database.escape(fromUser)}') AND userId='#{database.escape(fromUser)}' AND UNIX_TIMESTAMP(time) > UNIX_TIMESTAMP(NOW())").each do |r|
       return "You have reached a rate limit. Wait until #{r["time"]} and try again."
     end
   end
@@ -125,7 +125,7 @@ module Yo
     token_user = getTokenUser(database, api_token)
     return returnMsg 400, "unknown api_token: #{api_token}" if token_user.nil?
     list = []
-    database.query("select * from logYoed where userId='nona7' order by time desc limit #{database.escape(count)}").each do |r|
+    database.query("SELECT * FROM logYoed WHERE userId='nona7' ORDER BY time DESC LIMIT #{database.escape(count)}").each do |r|
       list << "{\"user\": \"#{r["fromUser"]}\", \"time\": \"#{r["time"]}\"}"
     end
     str = "{\"code\": 200, \"result\": [" # #{list}}\n"
