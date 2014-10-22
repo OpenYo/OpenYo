@@ -101,6 +101,9 @@ module Portfolio
     get '/login/' do
       erb :login
     end
+    get '/signup/' do
+      erb :signup
+    end
     get '/user/:user' do
       @user = params[:user]
       erb :user
