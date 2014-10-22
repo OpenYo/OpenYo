@@ -111,5 +111,8 @@ module Portfolio
     get '/mypage/' do
       erb :mypage
     end
+    get '/mypage/imkayac/' do
+      erb :imkayac
+    end
   end
 end
