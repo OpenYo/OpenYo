@@ -3,7 +3,7 @@
         var user = localStorage.getItem('id');
         if(!!user){
             $('#head').html('Yo ' + user + '! Go <a href="/mypage/">MyPage</a>');
-            $('#auth').attr('disabled', true);
+            $('#create').attr('disabled', true);
         }
     });
     $('#create').bind('click', function(){
