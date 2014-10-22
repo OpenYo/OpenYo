@@ -22,6 +22,8 @@
             },
             method: 'GET'
         }).done(function(data){
+            $('#historyBox').empty();
+            $('#historyBox').append("<tr><td>From</td><td>Time</td></tr>");
             var arr = data.result;
             for(var i=0; i < arr.length; ++i){
                 $('#historyBox').append("<tr><td>" + arr[i].user + "</td><td>" + arr[i].time + "</td></tr>");
