@@ -105,12 +105,8 @@ module Portfolio
       @user = params[:user]
       erb :user
     end
+    get '/mypage/' do
+      erb :mypage
+    end
   end
 end
-
-
-
-
-
-
-

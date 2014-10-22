@@ -6,13 +6,19 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
-  <h1>Send Yo to <%= @user %></h1>
-  
-  <input type="submit" id="yo" value="Yo" /><br />
-  <input type="hidden" id="to" value="<%= @user %>" />
-  <span id="msgBox"></span><br />
+  <h1 id="head">Yo</h1>
 
+  <h2>Send Yo</h2>
+  <input type="text" id="to" size="20" />
+  <input type="submit" id="yo" value="Yo" /><br />
+  <span id="msgBox"></span>
+
+  <h2>Yo All</h2>
+  <input type="submit" id="yoAll" value="YoAll!" /><br />
+  <span id="YoAllMsgBox"></span>
+  
   <a href="/login/">Login</a>
 </body>
+<script src="/js/user.js"></script>
 <script src="/js/yo.js"></script>
 </html>
