@@ -163,7 +163,7 @@ module Yo
   end
 
   def addImkayac(database, username, kayacId, kayacPass, kayacSec)
-    return returnMsg 400, "need kayac_id." if kayacId.nil?
+    return returnMsg 400, "need kayac_id." if kayacId.nil? || kayacId == ""
     database.query("INSERT INTO imkayac VALUES('#{username}', '#{database.escape(kayacId)}', #{if kayacPass.nil? then 'NULL' else "'#{database.escape(kayacPass)}'" end}, #{if kayacSec.nil? then 'NULL' else "'#{database.escape(kayacSec)}'" end})")
     exists = nil
     database.query("SELECT * FROM notifyType WHERE userId='#{database.escape(username)}' AND type='imkayac' LIMIT 1").each do |r|
