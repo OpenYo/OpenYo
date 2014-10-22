@@ -98,5 +98,19 @@ module Portfolio
     post '/config/add_gcm_id/' do
       Yo::addGCMId(@database, params[:username], params[:proj_num], params[:reg_id])
     end
+    get '/login/' do
+      erb :login
+    end
+    get '/user/:user' do
+      @user = params[:user]
+      erb :user
+    end
   end
 end
+
+
+
+
+
+
+

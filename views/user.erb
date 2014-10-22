@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>OpenYo</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>Send Yo to <%= @user %></h1>
+  
+  <input type="submit" id="yo" value="Yo" /><br />
+  <input type="hidden" id="user" value="<%= @user %>" />
+  <span id="msgBox"></span><br />
+
+  <a href="/login/">Login</a>
+</body>
+<script src="/js/yo.js"></script>
+</html>
