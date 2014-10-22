@@ -7,4 +7,26 @@
             $('#head').html('Yo? -- Please <a href="/login/">Login</a>');
         }
     });
+    $('#history').bind('click', function(){
+        var token = localStorage.getItem("apiToken");
+        if(token === undefined){
+            $('#historyBox').append("<tr><td></td><td>ログインしてください。</td></tr>");
+            return;
+        }
+        $.ajax({
+            url: '/history/',
+            dataType: 'json',
+            data: {
+                api_ver: '0.1',
+                api_token: token
+            },
+            method: 'GET'
+        }).done(function(data){
+            var arr = data.result;
+            for(var i=0; i < arr.length; ++i){
+                $('#historyBox').append("<tr><td>" + arr[i].user + "</td><td>" + arr[i].time + "</td></tr>");
+            }
+        }).fail(function(xhr){
+        })
+    });
 })();
