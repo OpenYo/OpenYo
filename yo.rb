@@ -22,6 +22,7 @@ module Yo
   end
 
   def self.tooFast(database, fromUser)
+    return true if RATE_BLACKBOX0(database, fromUser)
     delta = RATEDELTA
     max = RATEMAX
     span = RATESPAN
