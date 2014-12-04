@@ -30,6 +30,10 @@ def decideType(database, username, fromUser, type)
   end
 end
 
+def RATE_BLACKBOX0(database, fromUser) # 好きなことをしてください
+  return false
+end
+
 def RATE_BLACKBOX1(delta) # 規制開始時の最小時間に何らかの変換関数を掛けることができます。
   return delta * 2 # 規制時間は2秒(RATEDELTA が1 の時)
 end
